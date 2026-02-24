@@ -1,0 +1,343 @@
+:root {
+  --primary: #007BFF;
+  --primary-hover: #4f46e5;
+  --bg-dark: #09090b;
+  --bg-sidebar: #111113;
+  --bg-card: #18181b;
+  --text-main: #fafafa;
+  --text-muted: #a1a1aa;
+  --accent: #818cf8;
+  --error: #ef4444;
+  --success: #22c55e;
+  --border: #27272a;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  min-height: 100vh;
+}
+
+.wrapper{
+  display:flex;
+}
+
+.footer{
+  display: flex;
+  justify-content: center;
+  padding: 1rem 0;
+}
+
+.footer a{
+  color: #6c45f3;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+/* Dashboard Layout */
+.sidebar {
+  width: 20rem;
+  background: var(--bg-sidebar);
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  border-bottom-right-radius: 1rem;
+}
+
+.main-content {
+  flex: 1;
+  padding: 2rem;
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--primary);
+  margin-bottom: 2.5rem;
+  letter-spacing: -0.02em;
+  transition: all 0.3s ease;
+}
+
+.logo:hover {
+  filter: brightness(1.1);
+}
+
+.logo i {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.logo:hover i {
+  transform: scale(1.1) rotate(-5deg);
+}
+
+.logo-text {
+  display: flex;
+  align-items: baseline;
+  gap: 0.4rem;
+}
+
+.beta-badge {
+  font-size: 0.6rem;
+  font-weight: 700;
+  background: rgba(139, 92, 246, 0.15);
+  color: var(--accent);
+  padding: 0.15rem 0.45rem;
+  border-radius: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid rgba(139, 92, 246, 0.2);
+}
+
+.nav-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  color: var(--text-muted);
+  text-decoration: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+}
+
+.nav-item.active {
+  background: rgba(99, 102, 241, 0.1);
+  color: var(--primary);
+}
+
+.nav-item:hover:not(.active) {
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text-main);
+}
+
+.token-card {
+  margin-top: auto;
+  background: linear-gradient(135deg, rgba(99, 102, 241, 0.1), rgba(129, 140, 248, 0.1));
+  border: 1px solid rgba(99, 102, 241, 0.3);
+  padding: 1rem;
+  border-radius: 1rem;
+}
+
+.token-header {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  letter-spacing: 0.05em;
+  margin-bottom: 0.5rem;
+}
+
+.token-count {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.buy-tokens-btn {
+  width: 100%;
+  margin-top: 0.75rem;
+  background: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+/* Converter UI */
+.page-header {
+  margin-bottom: 2rem;
+}
+
+.page-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.converter-grid {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 1.5rem;
+}
+
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: 0.75rem;
+  padding: 4rem 2rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.savings-container {
+  grid-column: span 2;
+  margin-top: 1rem;
+  display: flex;
+  justify-content: center;
+}
+
+.savings-badge {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 1rem 2rem;
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  box-shadow: 0 10px 15px -3px rgba(34, 197, 94, 0.2);
+  animation: scaleIn 0.3s ease-out;
+}
+
+.savings-title {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  opacity: 0.9;
+}
+
+.savings-value {
+  font-size: 1.5rem;
+  font-weight: 800;
+}
+
+@keyframes scaleIn {
+  from { transform: scale(0.9); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+
+.drop-zone:hover {
+  border-color: var(--primary);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.drop-zone i {
+  font-size: 2.5rem;
+  color: var(--primary);
+  margin-bottom: 1rem;
+}
+
+.controls-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.btn {
+  width: 100%;
+  padding: 0.875rem;
+  border-radius: 0.625rem;
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.2s;
+}
+
+.btn-primary {
+  background: var(--primary);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--primary-hover);
+}
+
+.btn-secondary {
+  background: var(--border);
+  color: var(--text-main);
+}
+
+.input-field {
+  background: var(--bg-dark);
+  border: 1px solid var(--border);
+  color: white;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  width: 100%;
+  margin-top: 0.5rem;
+}
+
+.progress-container {
+  margin-top: 1.5rem;
+  display: none;
+}
+
+.progress-bar {
+  height: 6px;
+  background: var(--border);
+  border-radius: 3px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: var(--primary);
+  width: 0%;
+}
+
+.preview-grid {
+  grid-column: span 2;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+video {
+  width: 100%;
+  background: black;
+  border-radius: 0.5rem;
+  aspect-ratio: 16/9;
+}
+
+/* Watermark tabs */
+.wm-tab {
+  opacity: 0.5;
+  transition: all 0.2s;
+}
+
+.wm-tab.active {
+  opacity: 1;
+  background: var(--primary) !important;
+  color: white !important;
+}
+
+.hidden { display: none; }
+
+@media (max-width: 1024px) {
+  .sidebar { width: 80px; padding: 1rem; }
+  .sidebar span, .token-card { display: none; }
+  .converter-grid { grid-template-columns: 1fr; }
+}

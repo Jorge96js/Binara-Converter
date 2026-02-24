@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MP4 a WebM Optimizer - Modern Video Conversion</title>
+    <meta name="description" content="Convierte y optimiza tus videos MP4 a WebM directamente en tu navegador con la mejor calidad y velocidad.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="wrapper">
+<div class="sidebar">
+        <div class="logo">
+            <i data-lucide="video" style="color: var(--accent)"></i>
+            <span class="logo-text">Binaraweb <span style="color: var(--text-main); font-weight: 600;">Converter</span> <span class="beta-badge">beta</span></span>
+        </div>
+        
+        <nav>
+            <a href="#" class="nav-item active" id="nav-video">
+                <i data-lucide="zap"></i>
+                <span>Convertidor WebM</span>
+            </a>
+            <a href="#" class="nav-item" id="nav-gif">
+                <i data-lucide="image"></i>
+                <span>GIF Maker</span>
+            </a>
+            <!-- <a href="#" class="nav-item">
+                <i data-lucide="history"></i>
+                <span>Historial</span>
+            </a>
+            <a href="#" class="nav-item">
+                <i data-lucide="settings"></i>
+                <span>Ajustes</span>
+            </a>-->
+        </nav>
+
+        <div class="token-card">
+            <div class="token-header">Tokens Disponibles</div>
+            <div class="token-count" id="credit-count">10</div>
+            <button class="buy-tokens-btn">Recargar Tokens</button>
+        </div>
+    </div>
+
+    <main class="main-content" id="video-page">
+        <header class="page-header">
+            <h1 class="page-title">Optimizar Video</h1>
+            <p style="color: var(--text-muted)">Convierte tus videos MP4 a WebM optimizados en segundos.</p>
+        </header>
+
+        <div class="converter-grid">
+            <!-- Columna izquierda: Upload + Preview -->
+            <div class="card">
+                <div id="drop-zone" class="drop-zone">
+                    <i data-lucide="upload"></i>
+                    <h3>Sube tu video MP4</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">Arrastra o selecciona un archivo</p>
+                    <input type="file" id="file-input" accept="video/*" class="hidden">
+                </div>
+
+                <!-- Preview del video original -->
+                <div id="vid-input-preview-container" class="hidden" style="margin-top: 1rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                        <p style="font-size: 0.875rem; font-weight: 600;">Vista previa del original</p>
+                        <div id="vid-video-info" class="hidden" style="display: inline-flex; gap: 0.5rem;">
+                            <span id="vid-video-duration" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; background: rgba(139,92,246,0.15); color: var(--accent); border-radius: 1rem; font-weight: 600;">--</span>
+                            <span id="vid-video-filesize" style="font-size: 0.75rem; padding: 0.2rem 0.6rem; background: rgba(239,68,68,0.15); color: var(--error); border-radius: 1rem; font-weight: 600;">--</span>
+                        </div>
+                    </div>
+                    <video id="vid-original-preview" controls style="width: 100%; border-radius: 0.5rem; background: black; max-height: 300px;"></video>
+                </div>
+
+                <!-- URL remota -->
+                <div style="margin-top: 1.5rem;">
+                    <label style="font-size: 0.875rem; color: var(--text-muted);">O ingresa una URL remota</label>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input type="text" id="url-input" class="input-field" placeholder="https://example.com/video.mp4" style="margin-top: 0;">
+                        <button id="url-btn" class="btn btn-secondary" style="width: auto; padding: 0 1.5rem;">Cargar</button>
+                    </div>
+                </div>
+
+                <!-- Progreso -->
+                <div id="progress-section" class="progress-container">
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="status-message" style="font-size: 0.875rem; color: var(--text-muted);">Listo para procesar...</p>
+                </div>
+            </div>
+
+            <!-- Columna derecha: Controles -->
+            <div class="controls-section">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">Configuración WebM</h3>
+
+                    <!-- Nivel de Compresión -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <label style="font-size: 0.875rem;">Nivel de Compresión</label>
+                            <span id="quality-value" style="font-size: 0.875rem; color: var(--primary);">Media (30)</span>
+                        </div>
+                        <input type="range" id="quality-range" min="15" max="50" value="30" style="width: 100%; accent-color: var(--primary);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                            <span>15 (Alta calidad)</span>
+                            <span>50 (Máx compresión)</span>
+                        </div>
+                    </div>
+
+                    <!-- Resolución -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">Resolución (Ancho)</label>
+                        <select id="vid-res" class="input-field" style="margin-top: 0;">
+                            <option value="-1">Original</option>
+                            <option value="1920">1920px (Full HD)</option>
+                            <option value="1280" selected>1280px (HD)</option>
+                            <option value="854">854px (480p)</option>
+                            <option value="640">640px (Pequeño)</option>
+                        </select>
+                    </div>
+
+                    <!-- Marca de Agua -->
+                    <div style="border-top: 1px solid var(--border); padding-top: 1.25rem; margin-top: 1rem;">
+                        <label style="font-size: 0.875rem; font-weight: 600; display: block; margin-bottom: 0.75rem;">Marca de Agua</label>
+
+                        <!-- Tabs -->
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <button type="button" id="vid-wm-tab-text" class="btn btn-secondary wm-tab active" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Texto</button>
+                            <button type="button" id="vid-wm-tab-image" class="btn btn-secondary wm-tab" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Imagen</button>
+                            <button type="button" id="vid-wm-tab-none" class="btn btn-secondary wm-tab" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Sin marca</button>
+                        </div>
+
+                        <!-- Panel Texto -->
+                        <div id="vid-wm-panel-text">
+                            <input type="text" id="vid-watermark-text" class="input-field" placeholder="Tu marca aquí" style="margin-top: 0; margin-bottom: 0.75rem;">
+                        </div>
+
+                        <!-- Panel Imagen -->
+                        <div id="vid-wm-panel-image" class="hidden">
+                            <div id="vid-wm-img-drop" style="border: 2px dashed var(--border); border-radius: 0.5rem; padding: 1rem; text-align: center; cursor: pointer; margin-bottom: 0.75rem; transition: border-color 0.2s;">
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Haz clic para subir logo (PNG recomendado)</p>
+                                <input type="file" id="vid-wm-image-input" accept="image/*" class="hidden">
+                                <img id="vid-wm-img-preview" class="hidden" style="max-width: 64px; max-height: 64px; margin-top: 0.5rem; border-radius: 0.25rem;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Tamaño</label>
+                                    <select id="vid-wm-img-size" class="input-field" style="margin-top: 0;">
+                                        <option value="32">32px</option>
+                                        <option value="64" selected>64px</option>
+                                        <option value="128">128px</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Opacidad</label>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="range" id="vid-wm-img-opacity" min="10" max="100" value="80" style="flex: 1; accent-color: var(--primary);">
+                                        <span id="vid-wm-img-opacity-value" style="font-size: 0.75rem; color: var(--primary); min-width: 30px;">80%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Posición (compartida) -->
+                        <div id="vid-wm-position-section">
+                            <label style="font-size: 0.875rem; display: block; margin-bottom: 0.5rem; margin-top: 0.75rem;">Posición</label>
+                            <select id="vid-watermark-pos" class="input-field" style="margin-top: 0;">
+                                <option value="top_left">Sup. Izquierda</option>
+                                <option value="top_right">Sup. Derecha</option>
+                                <option value="bottom_left">Inf. Izquierda</option>
+                                <option value="bottom_right" selected>Inf. Derecha</option>
+                                <option value="center">Centro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="convert-btn" class="btn btn-primary" style="margin-top: 1.5rem;" disabled>
+                        <i data-lucide="zap"></i>
+                        Convertir (1 Token)
+                    </button>
+                </div>
+            </div>
+
+            <!-- Resultados -->
+            <div id="previews" class="preview-grid hidden">
+                <div id="savings-display" class="savings-container"></div>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <p style="font-size: 0.875rem; font-weight: 600;">Original</p>
+                        <span id="vid-original-size" style="font-size: 0.8rem; padding: 0.25rem 0.75rem; background: rgba(239,68,68,0.15); color: var(--error); border-radius: 2rem; font-weight: 600;">--</span>
+                    </div>
+                    <video id="original-preview" controls></video>
+                </div>
+                <div class="card">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <p style="font-size: 0.875rem; font-weight: 600;">Resultado WebM</p>
+                        <span id="vid-result-size" style="font-size: 0.8rem; padding: 0.25rem 0.75rem; background: rgba(34,197,94,0.15); color: var(--success); border-radius: 2rem; font-weight: 600;">--</span>
+                    </div>
+                    <video id="optimized-preview" controls></video>
+                    <button id="download-btn" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i data-lucide="download"></i>
+                        Descargar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Nueva Sección GIF Maker -->
+    <main class="main-content hidden" id="gif-page">
+        <header class="page-header">
+            <h1 class="page-title">Video a GIF Professional</h1>
+            <p style="color: var(--text-muted)">Convierte MP4, MKV, WMV a GIFs optimizados y personalizados.</p>
+        </header>
+
+        <div class="converter-grid">
+            <div class="card">
+                <div id="gif-drop-zone" class="drop-zone">
+                    <i data-lucide="image"></i>
+                    <h3>Sube tu video (Cualquier formato)</h3>
+                    <p style="color: var(--text-muted); margin-top: 0.5rem;">MP4, WebM, MKV, WMV admitidos</p>
+                    <input type="file" id="gif-file-input" accept="video/*" class="hidden">
+                </div>
+
+                <!-- Info del video subido -->
+                <div id="gif-video-info" class="hidden" style="margin-top: 1rem; padding: 0.75rem 1rem; background: rgba(139, 92, 246, 0.1); border: 1px solid rgba(139, 92, 246, 0.2); border-radius: 0.5rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center;">
+                        <span style="font-size: 0.8rem; color: var(--text-muted);">Duración del video:</span>
+                        <span id="gif-video-duration" style="font-size: 0.875rem; font-weight: 600; color: var(--primary);">--</span>
+                    </div>
+                </div>
+
+                <!-- URL remota -->
+                <div style="margin-top: 1.5rem;">
+                    <label style="font-size: 0.875rem; color: var(--text-muted);">O ingresa una URL remota</label>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <input type="text" id="gif-url-input" class="input-field" placeholder="https://example.com/video.mp4" style="margin-top: 0;">
+                        <button id="gif-url-btn" class="btn btn-secondary" style="width: auto; padding: 0 1.5rem;">Cargar</button>
+                    </div>
+                </div>
+
+                <div id="gif-progress-section" class="progress-container">
+                    <div class="progress-bar">
+                        <div id="gif-progress-fill" class="progress-fill"></div>
+                    </div>
+                    <p id="gif-status-message" style="font-size: 0.875rem; color: var(--text-muted);">Configura tu GIF...</p>
+                </div>
+
+                <div id="gif-input-preview-container" class="hidden" style="margin-top: 1.5rem; border-top: 1px solid var(--border); padding-top: 1.5rem;">
+                    <p style="font-size: 0.875rem; color: var(--text-muted); margin-bottom: 0.75rem;">Vista previa del video original:</p>
+                    <video id="gif-original-preview" controls style="width: 100%; border-radius: 0.5rem;"></video>
+                </div>
+            </div>
+
+            <div class="controls-section">
+                <div class="card">
+                    <h3 style="margin-bottom: 1rem; font-size: 1rem;">Ajustes de GIF</h3>
+
+                    <!-- FPS -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <label style="font-size: 0.875rem;">Fotogramas por segundo (FPS)</label>
+                            <span id="gif-fps-value" style="font-size: 0.875rem; color: var(--primary);">15 fps</span>
+                        </div>
+                        <input type="range" id="gif-fps" min="5" max="30" value="15" style="width: 100%; accent-color: var(--primary);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                            <span>5 (Ligero)</span>
+                            <span>30 (Fluido)</span>
+                        </div>
+                    </div>
+
+                    <!-- Duración / Recorte -->
+                    <div style="margin-bottom: 1.25rem; border: 1px solid var(--border); border-radius: 0.5rem; padding: 1rem;">
+                        <label style="font-size: 0.875rem; display: block; margin-bottom: 0.75rem; font-weight: 600;">Recortar duración</label>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Inicio (seg)</label>
+                                <input type="number" id="gif-start" class="input-field" value="0" min="0" step="0.5" style="margin-top: 0;">
+                            </div>
+                            <div>
+                                <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Fin (seg)</label>
+                                <input type="number" id="gif-end" class="input-field" value="5" min="0.5" step="0.5" style="margin-top: 0;">
+                            </div>
+                        </div>
+                        <p id="gif-duration-label" style="font-size: 0.75rem; color: var(--accent); margin-top: 0.5rem; text-align: center;">Duración del GIF: 5.0s</p>
+                    </div>
+                    
+                    <!-- Optimización de Colores -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 0.5rem;">
+                            <label style="font-size: 0.875rem;">Número de Colores</label>
+                            <span id="gif-colors-value" style="font-size: 0.875rem; color: var(--primary);">128</span>
+                        </div>
+                        <input type="range" id="gif-colors" min="16" max="256" value="128" style="width: 100%; accent-color: var(--primary);">
+                        <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted);">
+                            <span>16 (Baja)</span>
+                            <span>256 (Pro)</span>
+                        </div>
+                    </div>
+
+                    <!-- Resolución -->
+                    <div style="margin-bottom: 1.25rem;">
+                        <label style="font-size: 0.875rem; display: block; margin-bottom: 0.5rem;">Resolución (Ancho)</label>
+                        <select id="gif-res" class="input-field" style="margin-top: 0;">
+                            <option value="-1">Original</option>
+                            <option value="640">640px (Medio)</option>
+                            <option value="480">480px (Pequeño)</option>
+                            <option value="320" selected>320px (Optimizado)</option>
+                        </select>
+                    </div>
+
+                    <!-- Marca de Agua -->
+                    <div style="border-top: 1px solid var(--border); padding-top: 1.25rem; margin-top: 1rem;">
+                        <label style="font-size: 0.875rem; font-weight: 600; display: block; margin-bottom: 0.75rem;">Marca de Agua</label>
+
+                        <!-- Tipo de Marca -->
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem;">
+                            <button type="button" id="wm-tab-text" class="btn btn-secondary wm-tab active" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Texto</button>
+                            <button type="button" id="wm-tab-image" class="btn btn-secondary wm-tab" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Imagen</button>
+                            <button type="button" id="wm-tab-none" class="btn btn-secondary wm-tab" style="flex: 1; padding: 0.5rem; font-size: 0.8rem;">Sin marca</button>
+                        </div>
+
+                        <!-- Panel Texto -->
+                        <div id="wm-panel-text">
+                            <input type="text" id="gif-watermark-text" class="input-field" placeholder="Tu SaaS aquí" style="margin-top: 0; margin-bottom: 0.75rem;">
+                        </div>
+
+                        <!-- Panel Imagen -->
+                        <div id="wm-panel-image" class="hidden">
+                            <div id="wm-img-drop" style="border: 2px dashed var(--border); border-radius: 0.5rem; padding: 1rem; text-align: center; cursor: pointer; margin-bottom: 0.75rem; transition: border-color 0.2s;">
+                                <p style="font-size: 0.8rem; color: var(--text-muted);">Haz clic para subir logo (PNG recomendado)</p>
+                                <input type="file" id="gif-wm-image-input" accept="image/*" class="hidden">
+                                <img id="wm-img-preview" class="hidden" style="max-width: 64px; max-height: 64px; margin-top: 0.5rem; border-radius: 0.25rem;">
+                            </div>
+                            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Tamaño</label>
+                                    <select id="gif-wm-img-size" class="input-field" style="margin-top: 0;">
+                                        <option value="16">16px</option>
+                                        <option value="32" selected>32px</option>
+                                        <option value="64">64px</option>
+                                    </select>
+                                </div>
+                                <div>
+                                    <label style="font-size: 0.75rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Opacidad</label>
+                                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                                        <input type="range" id="gif-wm-img-opacity" min="10" max="100" value="80" style="flex: 1; accent-color: var(--primary);">
+                                        <span id="gif-wm-img-opacity-value" style="font-size: 0.75rem; color: var(--primary); min-width: 30px;">80%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Posición (compartida) -->
+                        <div id="wm-position-section">
+                            <label style="font-size: 0.875rem; display: block; margin-bottom: 0.5rem; margin-top: 0.75rem;">Posición</label>
+                            <select id="gif-watermark-pos" class="input-field" style="margin-top: 0;">
+                                <option value="top_left">Sup. Izquierda</option>
+                                <option value="top_right">Sup. Derecha</option>
+                                <option value="bottom_left">Inf. Izquierda</option>
+                                <option value="bottom_right" selected>Inf. Derecha</option>
+                                <option value="center">Centro</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button id="gif-convert-btn" class="btn btn-primary" style="margin-top: 1.5rem;" disabled>
+                        <i data-lucide="image"></i>
+                        Crear GIF (2 Tokens)
+                    </button>
+                </div>
+            </div>
+
+            <div id="gif-previews" class="preview-grid hidden">
+                <div class="card" style="grid-column: span 2;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.75rem;">
+                        <p style="font-size: 0.875rem; font-weight: 600;">GIF Generado</p>
+                        <span id="gif-filesize" style="font-size: 0.8rem; padding: 0.25rem 0.75rem; background: rgba(139, 92, 246, 0.15); color: var(--primary); border-radius: 2rem; font-weight: 600;">--</span>
+                    </div>
+                    <div style="text-align: center; background: #000; border-radius: 0.5rem; padding: 1rem;">
+                        <img id="gif-result" style="max-width: 100%; border-radius: 0.25rem;">
+                    </div>
+                    <button id="gif-download-btn" class="btn btn-primary" style="margin-top: 1rem;">
+                        <i data-lucide="download"></i>
+                        Descargar GIF
+                    </button>
+                </div>
+            </div>
+        </div>
+    </main>
+    </div>
+    <footer class="footer">
+        <p>&copy; 2026 Desarrollado por <a href="https://binaraweb.com.ar" target="_blank">Binaraweb</a>.</p>
+    </footer>
+    <script type="module" src="/src/main.js"></script>
+</body>
+</html>
